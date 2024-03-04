@@ -119,7 +119,7 @@ app.get("/api/items/:id", async (req, res) => {
 
   const getCategories = async (data) => {
     const respuestaCategoria = await fetch(
-      originalEndpoints.categories + itemInfo.category_id
+      originalEndpoints.categories + data.category_id
     );
     const infoCat = await respuestaCategoria.json();
 
@@ -128,7 +128,13 @@ app.get("/api/items/:id", async (req, res) => {
 
   const itemInfo = await fetchItemData();
   const itemDescription = await fetchItemDescription();
-  const itemCategories = await getCategories();
+  const itemCategories = await getCategories(itemInfo);
+
+  // Agregar la firma del autor al objeto de respuesta
+  const author = {
+    name: "David",
+    lastname: "Boxler"
+  };
 
   const organizedItemInfo = {
     id: itemInfo.id,
@@ -148,6 +154,7 @@ app.get("/api/items/:id", async (req, res) => {
   };
 
   res.json({
+    author: author,
     item: organizedItemInfo,
   });
 });
